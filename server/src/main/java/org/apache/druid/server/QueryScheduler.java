@@ -32,6 +32,10 @@ import org.apache.druid.client.SegmentServerSelector;
 import org.apache.druid.java.util.common.concurrent.Execs;
 import org.apache.druid.java.util.common.guava.LazySequence;
 import org.apache.druid.java.util.common.guava.Sequence;
+import org.apache.druid.java.util.common.logger.Logger;
+import org.apache.druid.java.util.emitter.core.NoopEmitter;
+import org.apache.druid.java.util.emitter.service.ServiceEmitter;
+import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.apache.druid.query.Query;
 import org.apache.druid.query.QueryCapacityExceededException;
 import org.apache.druid.query.QueryContexts;
@@ -58,6 +62,7 @@ import java.util.Set;
  */
 public class QueryScheduler implements QueryWatcher
 {
+  private static final Logger log = new Logger(QueryScheduler.class);
   public static final int UNAVAILABLE = -1;
   public static final String TOTAL = "total";
   private final int totalCapacity;
@@ -86,7 +91,34 @@ public class QueryScheduler implements QueryWatcher
    * but it is OK in most cases since they will be cleaned up once the query is done.
    */
   private final SetMultimap<String, String> queryDatasources;
+  private final ServiceEmitter emitter;
 
+  public QueryScheduler(
+      int totalNumThreads,
+      QueryPrioritizationStrategy prioritizationStrategy,
+      QueryLaningStrategy laningStrategy,
+      ServerConfig serverConfig,
+      ServiceEmitter emitter
+  )
+  {
+    this.prioritizationStrategy = prioritizationStrategy;
+    this.laningStrategy = laningStrategy;
+    this.queryFutures = Multimaps.synchronizedSetMultimap(HashMultimap.create());
+    this.queryDatasources = Multimaps.synchronizedSetMultimap(HashMultimap.create());
+    // if totalNumThreads is above 0 and less than druid.server.http.numThreads, enforce total limit
+    final boolean limitTotal;
+    if (totalNumThreads > 0 && totalNumThreads < serverConfig.getNumThreads()) {
+      limitTotal = true;
+      this.totalCapacity = totalNumThreads;
+    } else {
+      limitTotal = false;
+      this.totalCapacity = serverConfig.getNumThreads();
+    }
+    this.laneRegistry = BulkheadRegistry.of(getLaneConfigs(limitTotal));
+    this.emitter = emitter;
+  }
+
+  @VisibleForTesting
   public QueryScheduler(
       int totalNumThreads,
       QueryPrioritizationStrategy prioritizationStrategy,
@@ -108,6 +140,7 @@ public class QueryScheduler implements QueryWatcher
       this.totalCapacity = serverConfig.getNumThreads();
     }
     this.laneRegistry = BulkheadRegistry.of(getLaneConfigs(limitTotal));
+    this.emitter = new ServiceEmitter("test", "localhost", new NoopEmitter());
   }
 
   @Override
@@ -137,6 +170,12 @@ public class QueryScheduler implements QueryWatcher
     Optional<Integer> priority = prioritizationStrategy.computePriority(queryPlus, segments);
     query = priority.map(query::withPriority).orElse(query);
     Optional<String> lane = laningStrategy.computeLane(queryPlus.withQuery(query), segments);
+    log.info("[%s] lane assigned to [%s] query with [%,d] priority", lane.orElse("default"), query.getType(), priority.orElse(new Integer(0)));
+    final ServiceMetricEvent.Builder builderUsr = ServiceMetricEvent.builder().setFeed("metrics")
+                                                                    .setDimension("lane", lane.orElse("default"))
+                                                                    .setDimension("dataSource", query.getDataSource().getTableNames())
+                                                                    .setDimension("type", query.getType());
+    emitter.emit(builderUsr.build("query/priority", priority.orElse(new Integer(0))));
     return lane.map(query::withLane).orElse(query);
   }
 
