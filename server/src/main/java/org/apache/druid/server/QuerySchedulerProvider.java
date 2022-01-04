@@ -30,7 +30,8 @@ import org.apache.druid.server.initialization.ServerConfig;
 public class QuerySchedulerProvider extends QuerySchedulerConfig implements Provider<QueryScheduler>
 {
   private final ServerConfig serverConfig;
-  private ServiceEmitter emitter;
+  private final ServiceEmitter emitter;
+
   /**
    * This needs to be both marked as guice injected to be bound correctly, and also marked with json creator and
    * jackson inject to work with {@link org.apache.druid.guice.JsonConfigProvider}
@@ -40,6 +41,7 @@ public class QuerySchedulerProvider extends QuerySchedulerConfig implements Prov
   public QuerySchedulerProvider(@JacksonInject ServerConfig serverConfig, @JacksonInject ServiceEmitter emitter)
   {
     this.serverConfig = serverConfig;
+    this.emitter = emitter;
   }
 
   @Override
