@@ -2,7 +2,12 @@ name: Lint and Test Charts
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+  push:
+    branches:
+      - main
+      - github-workflow-chart-test-v2
+      - master
+      - releases/*
 
 jobs:
   lint-test:

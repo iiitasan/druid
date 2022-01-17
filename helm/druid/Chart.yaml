@@ -21,6 +21,8 @@ maintainers:
   - name: isandeep41
     email: isandeep41@gmail.com
     url: https://github.com/isandeep41
+  - name: AWaterColorPen
+  - name: maver1ck
 dependencies:
   - name: zookeeper
     version: 2.1.4
