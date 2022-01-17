@@ -47,3 +47,21 @@ jobs:
         env:
           CT_CHART_DIRS: helm/druid
           CT_SINCE: HEAD
+
+      - name: Run chart-testing (list-changed) 2
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --print-config)
+          if [[ -n "$changed" ]]; then
+            echo "::set-output name=changed::true"
+          fi
+        env:
+          CT_CHART_DIRS: helm
+          CT_SINCE: HEAD
+
+      - name: Run chart-testing (lint) 2
+        run: ct lint --print-config
+        env:
+          CT_CHART_DIRS: helm/druid
+          CT_SINCE: HEAD
+
