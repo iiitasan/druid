@@ -126,21 +126,7 @@ public class QueryScheduler implements QueryWatcher
       ServerConfig serverConfig
   )
   {
-    this.prioritizationStrategy = prioritizationStrategy;
-    this.laningStrategy = laningStrategy;
-    this.queryFutures = Multimaps.synchronizedSetMultimap(HashMultimap.create());
-    this.queryDatasources = Multimaps.synchronizedSetMultimap(HashMultimap.create());
-    // if totalNumThreads is above 0 and less than druid.server.http.numThreads, enforce total limit
-    final boolean limitTotal;
-    if (totalNumThreads > 0 && totalNumThreads < serverConfig.getNumThreads()) {
-      limitTotal = true;
-      this.totalCapacity = totalNumThreads;
-    } else {
-      limitTotal = false;
-      this.totalCapacity = serverConfig.getNumThreads();
-    }
-    this.laneRegistry = BulkheadRegistry.of(getLaneConfigs(limitTotal));
-    this.emitter = new ServiceEmitter("test", "localhost", new NoopEmitter());
+    this(totalNumThreads, prioritizationStrategy, laningStrategy, serverConfig, new ServiceEmitter("test", "localhost", new NoopEmitter()));
   }
 
   @Override
