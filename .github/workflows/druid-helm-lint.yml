@@ -35,7 +35,7 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          changed=$(ct list-changed  --chart-dirs helm/druid --print-config)
+          changed=$(ct list-changed  --chart-dirs helm --print-config)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi
