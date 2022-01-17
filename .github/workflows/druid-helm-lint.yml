@@ -49,7 +49,7 @@ jobs:
           CT_SINCE: HEAD
 
       - name: Run chart-testing (list-changed) 2
-        id: list-changed
+        id: list-changed2
         run: |
           changed=$(ct list-changed --print-config)
           if [[ -n "$changed" ]]; then
