@@ -328,6 +328,7 @@ public class QuerySchedulerTest
   @Test
   public void testConfigNone()
   {
+    expected.expect(ProvisionException.class);
     final Injector injector = createInjector();
     final String propertyPrefix = "druid.query.scheduler";
     final JsonConfigProvider<QuerySchedulerProvider> provider = JsonConfigProvider.of(
@@ -346,6 +347,7 @@ public class QuerySchedulerTest
   @Test
   public void testConfigHiLo()
   {
+    expected.expect(ProvisionException.class);
     final Injector injector = createInjector();
     final String propertyPrefix = "druid.query.scheduler";
     final JsonConfigProvider<QuerySchedulerProvider> provider = JsonConfigProvider.of(
@@ -386,6 +388,7 @@ public class QuerySchedulerTest
   @Test
   public void testConfigHiLoWithThreshold()
   {
+    expected.expect(ProvisionException.class);
     final Injector injector = createInjector();
     final String propertyPrefix = "druid.query.scheduler";
     final JsonConfigProvider<QuerySchedulerProvider> provider = JsonConfigProvider.of(
@@ -438,6 +441,7 @@ public class QuerySchedulerTest
   @Test
   public void testConfigManual()
   {
+    expected.expect(ProvisionException.class);
     final Injector injector = createInjector();
     final String propertyPrefix = "druid.query.scheduler";
     final JsonConfigProvider<QuerySchedulerProvider> provider = JsonConfigProvider.of(
@@ -460,6 +464,7 @@ public class QuerySchedulerTest
   @Test
   public void testConfigManualPercent()
   {
+    expected.expect(ProvisionException.class);
     final Injector injector = createInjector();
     final String propertyPrefix = "druid.query.scheduler";
     final JsonConfigProvider<QuerySchedulerProvider> provider = JsonConfigProvider.of(
