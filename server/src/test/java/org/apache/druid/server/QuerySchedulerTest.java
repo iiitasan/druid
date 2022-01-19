@@ -706,7 +706,10 @@ public class QuerySchedulerTest
     );
     ObjectMapper mapper = injector.getInstance(Key.get(ObjectMapper.class, Json.class));
     mapper.setInjectableValues(
-        new InjectableValues.Std().addValue(ServerConfig.class, injector.getInstance(ServerConfig.class))
+        new InjectableValues.Std()
+            .addValue(ServerConfig.class, injector.getInstance(ServerConfig.class))
+            .addValue(ServiceEmitter.class, injector.getInstance(ServiceEmitter.class))
+
     );
     return injector;
   }
