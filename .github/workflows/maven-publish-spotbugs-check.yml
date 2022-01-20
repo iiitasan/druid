@@ -5,6 +5,9 @@ on:
     branches:
       - query-laning-metrics-github
 
+env:
+  MVN: mvn -B
+
 jobs:
   build:
 
@@ -23,8 +26,11 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Export MVN
-        run: export MVN="mvn -B"
+      - name: MVN env 1
+        run: echo "MVN :${{env.MVN}}"
+
+      - name: MVN env 2
+        run: echo "MVN is:$MVN"
 
       - name: Java version
         run: java -Xmx32m -version
