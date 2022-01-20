@@ -19,6 +19,7 @@ jobs:
       packages: write
 
     steps:
+      - uses: actions/checkout@v2
       - name: Setup Java and Maven Action
         uses: ./
         with:
