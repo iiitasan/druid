@@ -41,7 +41,7 @@ jobs:
         run: javac -J-Xmx32m -version
 
       - name: mvn version
-          run: mvn --version
+        run: mvn --version
 
       - name: Build with Maven
         run: mvn -B spotbugs:check --fail-at-end -pl '!benchmarks'
