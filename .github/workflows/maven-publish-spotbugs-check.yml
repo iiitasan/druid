@@ -19,8 +19,8 @@ jobs:
       packages: write
 
     steps:
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@2
+      - name: Setup Java and Maven Action
+        uses: ./
         with:
           java-version: 8
           maven-version: '3.8.1'
