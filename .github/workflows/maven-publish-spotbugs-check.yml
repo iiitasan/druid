@@ -20,11 +20,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Maven Action
-        uses: s4u/maven-settings-action@v2.4.1
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
         with:
-          java-version: 8
-          maven-version: 3.8.1
+          java-version: '8'
+          distribution: 'adopt'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: MVN env 1
         run: echo "MVN :${{env.MVN}}"
@@ -42,4 +44,4 @@ jobs:
         run: mvn --version
 
       - name: Build with Maven
-        run: mvn -B spotbugs:check --fail-at-end -pl '!benchmarks'
+        run: mvn -B -T 1 clean compile spotbugs:check --fail-at-end -pl '!benchmarks'
