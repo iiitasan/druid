@@ -20,8 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Java and Maven Action
-        uses: ./
         with:
           java-version: 8
           maven-version: '3.8.1'
