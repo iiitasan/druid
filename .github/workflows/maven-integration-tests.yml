@@ -31,6 +31,12 @@ jobs:
       - name: Cat settings.xml
         run: cat settings.xml
 
+       - name: which mvn
+        run: which mvn
+
+      - name: type mvn
+        run: type mvn
+
       - name: MVN env 1
         run: echo "MVN :${{env.MVN}}"
 
