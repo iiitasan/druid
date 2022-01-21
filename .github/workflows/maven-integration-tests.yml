@@ -31,6 +31,12 @@ jobs:
       - name: Cat settings.xml
         run: cat settings.xml
 
+      - name: wget https://raw.githubusercontent.com/apache/maven/c3cf29438e3d65d6ee5c5726f8611af99d9a649a/apache-maven/src/assembly/maven/conf/settings.xml
+        run: wget -q https://raw.githubusercontent.com/apache/maven/c3cf29438e3d65d6ee5c5726f8611af99d9a649a/apache-maven/src/assembly/maven/conf/settings.xml -O settings.xml
+
+      - name: Cat settings.xml 2
+        run: cat settings.xml
+
       - name: which mvn
         run: which mvn
 
@@ -42,6 +48,8 @@ jobs:
 
       - name: ls m2
         run: ls -ltra ~/*/
+
+
 
       - name: MVN env 1
         run: echo "MVN :${{env.MVN}}"
