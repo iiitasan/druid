@@ -41,5 +41,5 @@ jobs:
       - name: Check license
         run: mvn -B apache-rat:check -Prat --fail-at-end -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Drat.consoleOutput=true
 
-      # - name: Build with Maven
-      #   run: mvn -B package --file pom.xml
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
