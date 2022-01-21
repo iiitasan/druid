@@ -66,5 +66,5 @@ jobs:
       - name: mvn version
         run: mvn --version
 
-#      - name: Build with Maven
-#        run: mvn clean compile -U -B verify -pl integration-tests -P integration-tests -Dgroups=batch-index -Djvm.runtime=8 -Dit.indexer=middleManager -Pskip-tests -Doverride.config.path=${OVERRIDE_CONFIG_PATH}
+      - name: Build with Maven
+        run: mvn clean compile -U -B verify -pl integration-tests -P integration-tests -Dgroups=batch-index -Djvm.runtime=8 -Dit.indexer=middleManager -Pskip-tests -Doverride.config.path=${OVERRIDE_CONFIG_PATH}
