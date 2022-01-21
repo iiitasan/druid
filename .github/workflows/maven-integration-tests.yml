@@ -38,10 +38,10 @@ jobs:
         run: type mvn
 
       - name: ls home
-        run: ls -ltr ~/
+        run: ls -ltra ~/
 
       - name: ls m2
-        run: ls -ltr ~/*/
+        run: ls -ltra ~/*/
 
       - name: MVN env 1
         run: echo "MVN :${{env.MVN}}"
