@@ -37,17 +37,17 @@ jobs:
 #      - name: Cat settings.xml 2
 #        run: cat settings.xml
 
-      - name: which mvn
-        run: which mvn
-
-      - name: type mvn
-        run: type mvn
-
-      - name: ls home
-        run: ls -ltra ~/
-
-      - name: ls m2
-        run: ls -ltra ~/*/
+#      - name: which mvn
+#        run: which mvn
+#
+#      - name: type mvn
+#        run: type mvn
+#
+#      - name: ls home
+#        run: ls -ltra ~/
+#
+#      - name: ls m2
+#        run: ls -ltra ~/*/
 
 
 
