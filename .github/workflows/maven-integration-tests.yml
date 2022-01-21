@@ -31,7 +31,7 @@ jobs:
       - name: Cat settings.xml
         run: cat settings.xml
 
-       - name: which mvn
+      - name: which mvn
         run: which mvn
 
       - name: type mvn
