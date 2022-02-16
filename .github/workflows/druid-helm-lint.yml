@@ -1,0 +1,62 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Lint and Test Charts
+
+on:
+  pull_request:
+  push:
+    branches:
+      - feature-helm-tier
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.5.4
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.2.0
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed  --print-config)
+          if [[ -n "$changed" ]]; then
+            echo "::set-output name=changed::true"
+          fi
+        env:
+          CT_CHART_DIRS: helm
+          CT_SINCE: HEAD
+
+      - name: Run chart-testing (lint)
+        run: ct lint --charts helm/druid --print-config --validate-maintainers=false
+        env:
+          CT_CHART_DIRS: helm/druid
+          CT_SINCE: HEAD
